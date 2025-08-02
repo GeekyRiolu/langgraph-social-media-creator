@@ -54,7 +54,7 @@ Before running the project, follow these steps to set up your environment:
 
 ## Usage
 
-### 🌐 Chat UI (Recommended)
+### 🌐 Gradio Integration
 
 Launch the interactive web interface:
 
@@ -69,7 +69,7 @@ The chat interface will open in your browser at `http://localhost:7860`. Feature
 - 📁 Automatic CSV download
 - 🎯 Visual content preview
 
-### 📱 Interactive Terminal Mode
+### 📱 Terminal Mode
 
 Run the script without arguments to use interactive mode:
 
