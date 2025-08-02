@@ -40,8 +40,7 @@ You'll be prompted to enter:
 ### Command Line Arguments
 
 ```bash
-python main.py --theme "Healthy Cooking" --duration 15 --output meal_plan.csv
-```
+python main.py --theme "Healthy Cooking" --duration 15 --output meal_plan.csv --rule-based --randomness medium```
 
 Arguments:
 - `--theme`: The brand theme for content generation
