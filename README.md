@@ -48,6 +48,9 @@ Arguments:
 - `--duration`: Number of days for content plan (default: 30)
 - `--output`: Output file path (default: content_calendar.csv)
 - `--interactive`: Force interactive mode
+- `--use-model`: Use model-based generation (default)
+- `--rule-based`: Use rule-based generation (overrides `--use-model`)
+- `--randomness`: Set randomness level for generation (low/medium/high, default: medium)
 
 ## Output Format
 
