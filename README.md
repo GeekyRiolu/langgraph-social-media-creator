@@ -59,12 +59,6 @@ Before running the project, follow these steps to set up your environment:
 Launch the interactive web interface:
 
 ```bash
-python start_chat_ui.py
-```
-
-Or manually:
-
-```bash
 python chat_ui.py
 ```
 
