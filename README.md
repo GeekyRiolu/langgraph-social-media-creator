@@ -20,10 +20,7 @@ A LangGraph-based agent that generates a social media content calendar based on 
 
 3. **Model Options:**
    - **Automatic Download (Recommended)**: The system will automatically download TinyLlama (1.1B parameters, ~670MB) when first run if you have `huggingface_hub` installed.
-   - **Manual Download Options**:
-     - **TinyLlama** (Smaller, faster): Download [tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf](https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf) (~670MB)
-     - **Mistral** (Larger, more powerful): Download [mistral-7b-instruct-v0.2.Q4_K_M.gguf](https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/resolve/main/mistral-7b-instruct-v0.2.Q4_K_M.gguf) (~4.1GB)
-   - Place the downloaded file in the `models` directory (will be created automatically if it doesn't exist)
+   - **Manual Download**: Download [tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf](https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf) (~670MB) and place it in the `models` directory (will be created automatically if it doesn't exist)
 
 ## Usage
 
