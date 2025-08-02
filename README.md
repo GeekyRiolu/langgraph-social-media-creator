@@ -10,17 +10,47 @@ A LangGraph-based agent that generates a social media content calendar based on 
 - Supports both LLM-based and rule-based content generation
 - Automatic model downloading (with huggingface_hub installed)
 
-## Setup
+## Setup Instructions
 
-1. Clone this repository
-2. Install dependencies:
+Before running the project, follow these steps to set up your environment:
+
+1. **Clone this repository**
+
+   ```bash
+   git clone https://github.com/GeekyRiolu/langgraph-social-media-creator.git
+   cd langgraph-social-media-creator
+   ```
+
+2. **Create a virtual environment**
+
+   ```bash
+   python -m venv .venv
+   ```
+
+3. **Activate the virtual environment**
+
+   - On Windows:
+     ```bash
+     .venv\Scripts\activate
+     ```
+   - On macOS/Linux:
+     ```bash
+     source .venv/bin/activate
+     ```
+
+4. **Install dependencies**
+
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Model Options:**
-   - **Automatic Download (Recommended)**: The system will automatically download TinyLlama (1.1B parameters, ~670MB) when first run if you have `huggingface_hub` installed.
-   - **Manual Download**: Download [tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf](https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf) (~670MB) and place it in the `models` directory (will be created automatically if it doesn't exist)
+## Model Options
+
+- **Automatic Download (Recommended):**  
+  The system will automatically download TinyLlama (1.1B parameters, ~670MB) when first run if you have `huggingface_hub` installed.
+
+- **Manual Download:**  
+  Download [tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf](https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf) (~670MB) and place it in the `models/` directory.
 
 ## Usage
 
@@ -55,10 +85,10 @@ Arguments:
 ## Output Format
 
 The generated CSV file contains the following columns:
-- Day: The day number (1-30)
-- Topic: The content topic for that day
-- Caption: A 1-2 sentence caption for the post
-- Hashtags: 3-5 relevant hashtags
+- **Day:** The day number (1-30)
+- **Topic:** The content topic for that day
+- **Caption:** A 1-2 sentence caption for the post
+- **Hashtags:** 3-5 relevant hashtags
 
 ## Project Structure
 
