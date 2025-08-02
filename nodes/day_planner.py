@@ -99,9 +99,10 @@ def day_planner_node(state: Dict) -> Dict:
     # Extract parameters from state
     brand_theme = state["brand_theme"]
     duration = state["duration"]
+    use_model = state.get("use_model", True)  # Default to True if not specified
     
-    # Try to use LLM for topic generation
-    llm = get_llm()
+    # Try to use LLM for topic generation if requested
+    llm = get_llm() if use_model else None
     topics = []
     
     if llm:
@@ -128,7 +129,7 @@ def day_planner_node(state: Dict) -> Dict:
             print("Falling back to rule-based topic generation...")
             topics = []
     
-    # If LLM failed or is not available, use rule-based approach
+    # If LLM failed or is not available or not requested, use rule-based approach
     if not topics:
         topics = generate_rule_based_topics(brand_theme, duration)
     
