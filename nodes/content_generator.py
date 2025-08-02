@@ -25,7 +25,7 @@ content_generator_prompt = ChatPromptTemplate.from_template(
     """
 )
 
-def generate_rule_based_content(brand_theme: str, topic: str) -> Dict:
+def generate_rule_based_content(brand_theme: str, topic: str, randomness: str = "medium") -> Dict:
     """Generate content using rule-based approach when LLM is not available."""
     # Template captions
     caption_templates = [
@@ -38,21 +38,78 @@ def generate_rule_based_content(brand_theme: str, topic: str) -> Dict:
         "Struggling with {}? Our {} approach might be just what you need.",
         "Your daily dose of {} inspiration: {} made simple.",
         "The most overlooked aspect of {} is {}. Let's change that!",
-        "Small steps toward {} success: Focus on {} today."
+        "Small steps toward {} success: Focus on {} today.",
+        # Additional templates for more variety
+        "Breaking down {} concepts: {} explained simply.",
+        "The {} revolution starts with {}. Are you ready?",
+        "Mastering {} through the lens of {}. A fresh perspective!",
+        "Why {} matters: The impact of {} on your daily life.",
+        "From novice to expert: {} strategies for {}.",
+        "The untold benefits of {} when approaching {}.",
+        "Reimagining {} through innovative {} techniques.",
+        "Behind every successful {} is a solid {}. Here's the proof.",
+        "The {} advantage: Leveraging {} for maximum results.",
+        "Transformative {} practices: {} edition."
     ]
     
-    # Template hashtags for different themes
+    # Template hashtags for different themes with more variety
     hashtag_templates = {
-        "fitness": ["#FitnessJourney", "#HealthyLifestyle", "#WorkoutMotivation", "#FitnessTips", "#ActiveLifestyle"],
-        "nutrition": ["#HealthyEating", "#NutritionTips", "#CleanEating", "#MealPrep", "#BalancedDiet"],
-        "wellness": ["#SelfCare", "#WellnessJourney", "#MindBodyBalance", "#HealthyHabits", "#WellnessWednesday"],
-        "business": ["#BusinessTips", "#Entrepreneurship", "#Success", "#Leadership", "#BusinessGrowth"],
-        "technology": ["#TechTips", "#Innovation", "#DigitalTransformation", "#FutureTech", "#TechnologyTrends"],
-        "default": ["#DailyTips", "#LifeHacks", "#Inspiration", "#Growth", "#Motivation"]
+        "fitness": [
+            ["#FitnessJourney", "#HealthyLifestyle", "#WorkoutMotivation", "#FitnessTips", "#ActiveLifestyle"],
+            ["#GetFit", "#FitnessGoals", "#TrainHard", "#HealthyBody", "#FitnessMotivation"],
+            ["#WorkoutRoutine", "#StayActive", "#FitLife", "#StrengthTraining", "#MoveYourBody"],
+            ["#FitnessCommunity", "#HealthyHabits", "#ExerciseDaily", "#FitnessJunkie", "#WorkoutWednesday"]
+        ],
+        "nutrition": [
+            ["#HealthyEating", "#NutritionTips", "#CleanEating", "#MealPrep", "#BalancedDiet"],
+            ["#EatWell", "#NutritionFacts", "#HealthyFood", "#FoodIsFuel", "#NutritiousFood"],
+            ["#HealthyMeals", "#WholeFoods", "#NutritionGoals", "#EatHealthy", "#FoodForThought"],
+            ["#MindfulEating", "#NutritionCoach", "#HealthyRecipes", "#FuelYourBody", "#EatTheRainbow"]
+        ],
+        "wellness": [
+            ["#SelfCare", "#WellnessJourney", "#MindBodyBalance", "#HealthyHabits", "#WellnessWednesday"],
+            ["#MentalHealth", "#Mindfulness", "#WellnessLifestyle", "#SelfLove", "#HealthAndWellness"],
+            ["#WellnessTips", "#HolisticHealth", "#WellBeing", "#MindfulLiving", "#BalancedLife"],
+            ["#WellnessWarrior", "#SelfCareRoutine", "#MindBodySpirit", "#WellnessCoach", "#InnerPeace"]
+        ],
+        "business": [
+            ["#BusinessTips", "#Entrepreneurship", "#Success", "#Leadership", "#BusinessGrowth"],
+            ["#StartupLife", "#BusinessStrategy", "#EntrepreneurMindset", "#SmallBusiness", "#BusinessOwner"],
+            ["#BusinessAdvice", "#GrowthMindset", "#BusinessCoach", "#MarketingStrategy", "#BusinessSuccess"],
+            ["#NetworkingTips", "#BusinessDevelopment", "#InnovationStrategy", "#LeadershipSkills", "#BusinessInsights"]
+        ],
+        "technology": [
+            ["#TechTips", "#Innovation", "#DigitalTransformation", "#FutureTech", "#TechnologyTrends"],
+            ["#TechNews", "#DigitalInnovation", "#EmergingTech", "#TechSolutions", "#InnovationMindset"],
+            ["#AITechnology", "#TechStartup", "#DigitalStrategy", "#TechForGood", "#InnovationLeadership"],
+            ["#TechCommunity", "#DigitalDisruption", "#FutureTrends", "#TechInnovation", "#SmartTechnology"]
+        ],
+        "default": [
+            ["#DailyTips", "#LifeHacks", "#Inspiration", "#Growth", "#Motivation"],
+            ["#LifeTips", "#PersonalGrowth", "#DailyInspiration", "#PositiveVibes", "#SuccessMindset"],
+            ["#GoodVibes", "#LifeLessons", "#MindsetMatters", "#DailyMotivation", "#InspirationDaily"],
+            ["#LifeGoals", "#PositiveThinking", "#MindsetShift", "#GrowthMindset", "#DailyWisdom"]
+        ]
     }
     
-    # Select a random caption template and format it
-    caption_template = random.choice(caption_templates)
+    # Set temperature based on randomness level
+    if randomness == "low":
+        # Less random - use first few templates
+        caption_template = random.choice(caption_templates[:5])
+        hashtag_set_index = 0
+    elif randomness == "high":
+        # More random - use all templates and add some variations
+        caption_template = random.choice(caption_templates)
+        # Sometimes add an emoji to the caption
+        emojis = ["✨", "🔥", "💪", "🌟", "📈", "🚀", "💯", "🎯", "⚡", "🌈"]
+        if random.random() > 0.5:
+            caption_template = random.choice(emojis) + " " + caption_template
+        hashtag_set_index = random.randint(0, 3)
+    else:  # medium (default)
+        caption_template = random.choice(caption_templates[:15])
+        hashtag_set_index = random.randint(0, 2)
+    
+    # Format the caption
     words = brand_theme.split()
     theme_word = words[0].lower() if words else "lifestyle"
     caption = caption_template.format(theme_word, topic)
@@ -60,15 +117,22 @@ def generate_rule_based_content(brand_theme: str, topic: str) -> Dict:
     # Select hashtags based on theme
     for theme_key in hashtag_templates.keys():
         if theme_key in brand_theme.lower():
-            hashtags = hashtag_templates[theme_key]
+            hashtag_set = hashtag_templates[theme_key]
             break
     else:
-        hashtags = hashtag_templates["default"]
+        hashtag_set = hashtag_templates["default"]
+    
+    # Get the hashtags from the selected set
+    hashtags = hashtag_set[hashtag_set_index].copy()
     
     # Add a theme-specific hashtag
     theme_hashtag = "#" + ''.join(word.capitalize() for word in brand_theme.split())
     if theme_hashtag not in hashtags:
-        hashtags = hashtags[:4] + [theme_hashtag]
+        hashtags[random.randint(0, len(hashtags)-1)] = theme_hashtag
+    
+    # For high randomness, shuffle the hashtags
+    if randomness == "high":
+        random.shuffle(hashtags)
     
     return {
         "caption": caption,
@@ -80,9 +144,19 @@ def content_generator_node(state: Dict) -> Dict:
     # Extract parameters from state
     brand_theme = state["brand_theme"]
     topics = state["topics"]
+    use_model = state.get("use_model", True)  # Default to True if not specified
+    randomness = state.get("randomness", "medium")  # Default to medium if not specified
     
-    # Try to use LLM for content generation
-    llm = get_llm(use_tinyllama=True)  # Use TinyLlama by default
+    # Set temperature based on randomness level
+    if randomness == "low":
+        temperature = 0.3
+    elif randomness == "high":
+        temperature = 1.0
+    else:  # medium
+        temperature = 0.7
+    
+    # Try to use LLM for content generation if requested
+    llm = get_llm(use_tinyllama=True) if use_model else None
     content_list = []
     
     for day, topic in enumerate(topics, start=1):
@@ -98,8 +172,8 @@ def content_generator_node(state: Dict) -> Dict:
                 # Generate the prompt
                 prompt = content_generator_prompt.format(brand_theme=brand_theme, topic=topic)
                 
-                # Get response from LLM
-                response = llm.invoke(prompt)
+                # Get response from LLM with adjusted temperature
+                response = llm.invoke(prompt, temperature=temperature)
                 
                 # Parse the response
                 caption = ""
@@ -120,19 +194,19 @@ def content_generator_node(state: Dict) -> Dict:
                     content_item["hashtags"] = " ".join(hashtags[:5])  # Limit to 5 hashtags
                 else:
                     # Fallback if parsing failed
-                    rule_based = generate_rule_based_content(brand_theme, topic)
+                    rule_based = generate_rule_based_content(brand_theme, topic, randomness)
                     content_item["caption"] = rule_based["caption"]
                     content_item["hashtags"] = rule_based["hashtags"]
                     
             except Exception as e:
                 print(f"Error using LLM for content generation for topic '{topic}': {e}")
                 print("Falling back to rule-based content generation...")
-                rule_based = generate_rule_based_content(brand_theme, topic)
+                rule_based = generate_rule_based_content(brand_theme, topic, randomness)
                 content_item["caption"] = rule_based["caption"]
                 content_item["hashtags"] = rule_based["hashtags"]
         else:
-            # Use rule-based approach if LLM is not available
-            rule_based = generate_rule_based_content(brand_theme, topic)
+            # Use rule-based approach if LLM is not available or not requested
+            rule_based = generate_rule_based_content(brand_theme, topic, randomness)
             content_item["caption"] = rule_based["caption"]
             content_item["hashtags"] = rule_based["hashtags"]
         
