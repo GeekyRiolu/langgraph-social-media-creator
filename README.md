@@ -54,7 +54,28 @@ Before running the project, follow these steps to set up your environment:
 
 ## Usage
 
-### Interactive Mode
+### 🌐 Chat UI (Recommended)
+
+Launch the interactive web interface:
+
+```bash
+python start_chat_ui.py
+```
+
+Or manually:
+
+```bash
+python chat_ui.py
+```
+
+The chat interface will open in your browser at `http://localhost:7860`. Features:
+- 💬 Interactive chat interface
+- ⚙️ Easy-to-use sidebar settings
+- 📊 Real-time content generation
+- 📁 Automatic CSV download
+- 🎯 Visual content preview
+
+### 📱 Interactive Terminal Mode
 
 Run the script without arguments to use interactive mode:
 
