@@ -20,6 +20,8 @@ class State(TypedDict):
     content: Optional[List[Dict]]
     formatted_content: Optional[pd.DataFrame]
     output_path: str
+    use_model: bool
+    randomness: str
 
 def build_graph() -> StateGraph:
     """Build the LangGraph workflow."""
