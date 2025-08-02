@@ -1,38 +1,8 @@
 from typing import Dict, List
-import os
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_community.llms import LlamaCpp
 
-# Initialize the LLM
-def get_llm():
-    """Initialize the LLM with appropriate settings."""
-    # Check if models directory exists, create if not
-    models_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "models")
-    os.makedirs(models_dir, exist_ok=True)
-    
-    model_path = os.path.join(models_dir, "mistral-7b-instruct-v0.2.Q4_K_M.gguf")
-    
-    if not os.path.exists(model_path):
-        print(f"\nModel not found at {model_path}")
-        print("To use the LLM functionality, please download the Mistral model:")
-        print("1. Visit https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF/")
-        print("2. Download the 'mistral-7b-instruct-v0.2.Q4_K_M.gguf' file")
-        print(f"3. Place it in the '{models_dir}' directory\n")
-        print("Using rule-based fallback for topic generation...")
-        return None
-    
-    try:
-        return LlamaCpp(
-            model_path=model_path,
-            temperature=0.7,
-            max_tokens=2048,
-            top_p=1,
-            verbose=False,
-        )
-    except Exception as e:
-        print(f"Error loading LlamaCpp model: {e}")
-        print("Using rule-based fallback for topic generation...")
-        return None
+# Import the model utilities
+from nodes.model_utils import get_llm
 
 # Define the prompt template
 day_planner_prompt = ChatPromptTemplate.from_template(
@@ -102,7 +72,9 @@ def day_planner_node(state: Dict) -> Dict:
     use_model = state.get("use_model", True)  # Default to True if not specified
     
     # Try to use LLM for topic generation if requested
-    llm = get_llm() if use_model else None
+    llm = None
+    if use_model:
+        llm = get_llm()  # Use TinyLlama for topic generation
     topics = []
     
     if llm:

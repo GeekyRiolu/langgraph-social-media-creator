@@ -13,8 +13,6 @@ except ImportError:
 # TinyLlama model information
 TINYLLAMA_REPO_ID = "TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF"
 TINYLLAMA_FILENAME = "tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf"
-MISTRAL_REPO_ID = "TheBloke/Mistral-7B-Instruct-v0.2-GGUF"
-MISTRAL_FILENAME = "mistral-7b-instruct-v0.2.Q4_K_M.gguf"
 
 def get_models_dir() -> str:
     """Get the path to the models directory."""
@@ -56,22 +54,15 @@ def download_model(repo_id: str, filename: str) -> Optional[str]:
         print(f"Error downloading model: {e}")
         return None
 
-def get_llm(use_tinyllama: bool = True, temperature: float = 0.7) -> Optional[LlamaCpp]:
+def get_llm(temperature: float = 0.7) -> Optional[LlamaCpp]:
     """Initialize the LLM with appropriate settings.
-    
+
     Args:
-        use_tinyllama: Whether to use TinyLlama (True) or Mistral (False)
         temperature: The temperature setting for generation (0.0-1.0)
     """
-    # Determine which model to use
-    if use_tinyllama:
-        repo_id = TINYLLAMA_REPO_ID
-        filename = TINYLLAMA_FILENAME
-        print("\nUsing TinyLlama model for generation (smaller but still effective)")
-    else:
-        repo_id = MISTRAL_REPO_ID
-        filename = MISTRAL_FILENAME
-        print("\nUsing Mistral model for generation (larger but more powerful)")
+    # Use TinyLlama model
+    repo_id = TINYLLAMA_REPO_ID
+    filename = TINYLLAMA_FILENAME
     
     models_dir = get_models_dir()
     model_path = os.path.join(models_dir, filename)
@@ -96,6 +87,9 @@ def get_llm(use_tinyllama: bool = True, temperature: float = 0.7) -> Optional[Ll
             return None
     
     try:
+        # Print the model usage message when we're actually going to use it
+        print("\nUsing TinyLlama model for generation")
+
         return LlamaCpp(
             model_path=model_path,
             temperature=temperature,

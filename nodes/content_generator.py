@@ -1,8 +1,6 @@
-from typing import Dict, List
-import os
+from typing import Dict
 import random
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_community.llms import LlamaCpp
 
 # Import the model utilities
 from nodes.model_utils import get_llm
@@ -156,7 +154,9 @@ def content_generator_node(state: Dict) -> Dict:
         temperature = 0.7
     
     # Try to use LLM for content generation if requested
-    llm = get_llm(use_tinyllama=True) if use_model else None
+    llm = None
+    if use_model:
+        llm = get_llm(temperature=temperature)
     content_list = []
     
     for day, topic in enumerate(topics, start=1):
