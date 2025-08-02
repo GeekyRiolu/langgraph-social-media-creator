@@ -64,12 +64,37 @@ def get_user_input():
         except ValueError:
             print("Please enter a valid number.")
     
+    # Get generation method preference
+    while True:
+        generation_method = input("Choose generation method (model/rule-based) [model]: ").lower()
+        if not generation_method or generation_method in ["model", "rule-based", "rule"]:
+            if not generation_method or generation_method == "model":
+                use_model = True
+                print("Using model-based generation (will fall back to rule-based if model is unavailable)")
+            else:
+                use_model = False
+                print("Using rule-based generation")
+            break
+        else:
+            print("Please enter 'model' or 'rule-based'")
+    
+    # Get randomness level
+    while True:
+        randomness = input("Set randomness level (low/medium/high) [medium]: ").lower()
+        if not randomness or randomness in ["low", "medium", "high"]:
+            if not randomness:
+                randomness = "medium"
+            print(f"Using {randomness} randomness level")
+            break
+        else:
+            print("Please enter 'low', 'medium', or 'high'")
+    
     # Get output file path
     output = input("Enter output file name (default: content_calendar.csv): ")
     if not output.strip():
         output = "content_calendar.csv"
     
-    return theme, duration, output
+    return theme, duration, output, use_model, randomness
 
 def main():
     # Check if command line arguments are provided
@@ -78,6 +103,10 @@ def main():
     parser.add_argument("--duration", type=int, help="Number of days for content plan")
     parser.add_argument("--output", type=str, help="Output file path")
     parser.add_argument("--interactive", action="store_true", help="Run in interactive mode")
+    parser.add_argument("--use-model", action="store_true", help="Use model-based generation (default)")
+    parser.add_argument("--rule-based", action="store_true", help="Use rule-based generation")
+    parser.add_argument("--randomness", type=str, choices=["low", "medium", "high"], default="medium", 
+                        help="Set randomness level for generation (default: medium)")
     args = parser.parse_args()
     
     # Determine if we should use interactive mode
@@ -85,12 +114,15 @@ def main():
     
     if interactive_mode:
         # Get user input interactively
-        theme, duration, output = get_user_input()
+        theme, duration, output, use_model, randomness = get_user_input()
     else:
         # Use command line arguments or defaults
         theme = args.theme or "Fitness for Busy Professionals"
         duration = args.duration or 30
         output = args.output or "content_calendar.csv"
+        # Determine generation method (rule-based flag takes precedence if both are specified)
+        use_model = not args.rule_based if args.rule_based else args.use_model
+        randomness = args.randomness
     
     # Build the graph
     graph = build_graph()
@@ -100,6 +132,8 @@ def main():
         "brand_theme": theme,
         "duration": duration,
         "output_path": output,
+        "use_model": use_model,
+        "randomness": randomness,
         "topics": None,
         "content": None,
         "formatted_content": None
@@ -107,6 +141,7 @@ def main():
     
     # Run the graph
     print(f"\nGenerating {duration}-day content plan for theme: '{theme}'...")
+    print(f"Using {'model-based' if use_model else 'rule-based'} generation with {randomness} randomness")
     final_state = graph.invoke(initial_state)
     
     print(f"Content plan saved to {final_state['output_path']}")
