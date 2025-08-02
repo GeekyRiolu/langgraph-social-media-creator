@@ -839,7 +839,7 @@ if __name__ == "__main__":
     demo.launch(
         server_name="0.0.0.0",
         server_port=7860,
-        share=True,
+        share=False,
         show_error=True,
         show_api=False,  # Disable API docs to avoid schema issues
         quiet=True       # Reduce verbose output
