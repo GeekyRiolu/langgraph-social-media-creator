@@ -56,11 +56,12 @@ def download_model(repo_id: str, filename: str) -> Optional[str]:
         print(f"Error downloading model: {e}")
         return None
 
-def get_llm(use_tinyllama: bool = True) -> Optional[LlamaCpp]:
+def get_llm(use_tinyllama: bool = True, temperature: float = 0.7) -> Optional[LlamaCpp]:
     """Initialize the LLM with appropriate settings.
     
     Args:
         use_tinyllama: Whether to use TinyLlama (True) or Mistral (False)
+        temperature: The temperature setting for generation (0.0-1.0)
     """
     # Determine which model to use
     if use_tinyllama:
@@ -97,7 +98,7 @@ def get_llm(use_tinyllama: bool = True) -> Optional[LlamaCpp]:
     try:
         return LlamaCpp(
             model_path=model_path,
-            temperature=0.7,
+            temperature=temperature,
             max_tokens=2048,
             top_p=1,
             verbose=False,
